@@ -24,9 +24,9 @@ public class SalesDao {
 
             statement.setInt(1, salesContract.getContract_id());
             statement.setString(2, salesContract.getVin());
-            statement.setDouble(3, salesContract.getSales_tax());
+            statement.setDouble(3, salesContract.getSalesTaxAmount());
             statement.setDouble(4, salesContract.getRecording_fee());
-            statement.setDouble(5,salesContract.getProcessing_fee());
+            statement.setDouble(5,salesContract.getProcessingFee());
             statement.setBoolean(6, salesContract.isFinance_status());
             statement.setDate(7, Date.valueOf(salesContract.getSale_date()));
 

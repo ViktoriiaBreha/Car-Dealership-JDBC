@@ -20,8 +20,8 @@ public class LeaseDao {
              PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setInt(1, leaseContract.getContract_id());
-            statement.setDouble(2, leaseContract.getEnding_value());
-            statement.setDouble(3, leaseContract.getLease_fee());
+            statement.setDouble(2, leaseContract.getExpectedEndingValue());
+            statement.setDouble(3, leaseContract.getLeaseFee());
             statement.setString(4, leaseContract.getVin());
 
 

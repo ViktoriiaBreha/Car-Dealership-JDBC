@@ -11,11 +11,12 @@ public class SalesContract extends Contract {
         private String vin;
         private int contract_id;
         private LocalDate sale_date;
+        private Vehicle vehicle_sold;
 
         public SalesContract (){};
 
     public SalesContract(int contract_id, String vin, double sales_tax, double recording_fee, double processing_fee,
-                         boolean finance_status, LocalDate sale_date) {
+                         boolean finance_status, LocalDate sale_date, Vehicle vehicle_sold) {
         this.contract_id = contract_id;
         this.vin = vin;
         this.sales_tax = sales_tax;
@@ -23,9 +24,10 @@ public class SalesContract extends Contract {
         this.processing_fee = processing_fee;
         this.finance_status = finance_status;
         this.sale_date = sale_date;
+        this.vehicle_sold = vehicle_sold;
     }
 
-//    public SalesContract(String date_of_contract, String customer_name, String customer_email, Vehicle vehicle_sold, double total_price, double monthly_payment, int contract_id, String vin, double sales_tax, double recording_fee, double processing_fee, boolean finance_status, Date sale_date) {
+//    public SalesContract(String date_of_contract, Vehicle vehicle_sold, double total_price, double monthly_payment, int contract_id, String vin, double sales_tax, double recording_fee, double processing_fee, boolean finance_status, Date sale_date) {
 //        super(date_of_contract, vehicle_sold, total_price, monthly_payment);
 //        this.contract_id = contract_id;
 //        this.vin = vin;
@@ -154,6 +156,16 @@ public class SalesContract extends Contract {
 
     public LocalDate getSale_date() {
         return sale_date;
+    }
+
+    @Override
+    public Vehicle getVehicle_sold() {
+        return vehicle_sold;
+    }
+
+    @Override
+    public void setVehicle_sold(Vehicle vehicle_sold) {
+        this.vehicle_sold = vehicle_sold;
     }
 }
 

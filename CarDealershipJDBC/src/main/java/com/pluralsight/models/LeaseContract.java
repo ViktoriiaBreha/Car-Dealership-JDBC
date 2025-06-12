@@ -6,13 +6,15 @@ public class LeaseContract extends Contract{
     private double lease_fee;
     private int contract_id;
     private String vin;
+    private Vehicle vehicle_sold;
 
     public LeaseContract(){};
-    public LeaseContract(int contract_id, double ending_value, double lease_fee, String vin) {
+    public LeaseContract(int contract_id, double ending_value, double lease_fee, String vin, Vehicle vehicle_sold) {
         this.contract_id = contract_id;
         this.ending_value = ending_value;
         this.lease_fee = lease_fee;
         this.vin = vin;
+        this.vehicle_sold = vehicle_sold;
     }
 
 //    public LeaseContract(String date_of_contract, String customer_name, String customer_email, Vehicle vehicle_sold, double total_price, double monthly_payment, int contract_id, double ending_value, double lease_fee, String vin) {
@@ -82,5 +84,15 @@ public class LeaseContract extends Contract{
 
     public void setVin(String vin) {
         this.vin = vin;
+    }
+
+    @Override
+    public Vehicle getVehicle_sold() {
+        return vehicle_sold;
+    }
+
+    @Override
+    public void setVehicle_sold(Vehicle vehicle_sold) {
+        this.vehicle_sold = vehicle_sold;
     }
 }

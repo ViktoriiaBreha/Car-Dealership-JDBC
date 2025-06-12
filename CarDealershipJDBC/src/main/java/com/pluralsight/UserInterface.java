@@ -243,7 +243,7 @@ public class UserInterface {
                 }
 
                 SalesContract salesContract = new SalesContract(0, vin_veh, 0.00, 0.00, 100, answer,
-                        LocalDate.now());
+                        LocalDate.now(), vehicleDAO.getVehicleByVin(vin_veh));
                 salesDao.addContract(salesContract);
 
                 break;
@@ -252,7 +252,7 @@ public class UserInterface {
                 String vin_veh2 = scanner.nextLine();
                 scanner.nextLine();
 
-                LeaseContract leaseContract = new LeaseContract(0,0.00,0.00, vin_veh2);
+                LeaseContract leaseContract = new LeaseContract(0,0.00,0.00, vin_veh2, vehicleDAO.getVehicleByVin(vin_veh2));
 
                 leaseDao.addContract(leaseContract);
 break;
