@@ -1,9 +1,11 @@
 package com.pluralsight;
 
 import com.pluralsight.models.Dealership;
+import com.pluralsight.models.LeaseContract;
 import com.pluralsight.models.SalesContract;
 import com.pluralsight.models.Vehicle;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -14,23 +16,26 @@ public class UserInterface {
     private Dealership dealership;
 
 
-    public UserInterface() {}
+    public UserInterface() {
+    }
 
-    public void display (){
+    public void display() {
         Scanner scanner = new Scanner(System.in);
 
         String url = System.getenv("url");
         String user = System.getenv("user");
         String password = System.getenv("password");
-        if (url == null){
+        if (url == null) {
             url = "jdbc:mysql://127.0.0.1:3306/sakila";
         }
 
         DataManager dataManager = new DataManager(url, user, password);
         boolean run = true;
-        while (run){
+        while (run) {
             try {
                 VehicleDAO vehicleDAO = new VehicleDAO(dataManager);
+                SalesDao salesDao = new SalesDao(dataManager);
+                LeaseDao leaseDao = new LeaseDao(dataManager);
 
                 displayMenuOptions();
 
@@ -40,19 +45,19 @@ public class UserInterface {
 
                 switch (choice1) {
                     case 1:
-                        processGetByPriceRequest( vehicleDAO, scanner);
+                        processGetByPriceRequest(vehicleDAO, scanner);
                         break;
                     case 2:
-                        processGetByMakeModelRequest(vehicleDAO,scanner);
+                        processGetByMakeModelRequest(vehicleDAO, scanner);
                         break;
                     case 3:
-                        processGetByYearRequest(vehicleDAO,scanner);
+                        processGetByYearRequest(vehicleDAO, scanner);
                         break;
                     case 4:
-                        processGetByColorRequest(vehicleDAO,scanner);
+                        processGetByColorRequest(vehicleDAO, scanner);
                         break;
                     case 5:
-                        processGetByMileageRequest(vehicleDAO,scanner);
+                        processGetByMileageRequest(vehicleDAO, scanner);
                         break;
                     case 6:
                         processGetByVehicleTypeRequest(vehicleDAO, scanner);
@@ -67,6 +72,7 @@ public class UserInterface {
                         processRemoveVehicleRequest(vehicleDAO, scanner);
                         break;
                     case 10:
+                        processContractRequest(vehicleDAO,salesDao,leaseDao,scanner );
                         break;
                     case 0:
                         run = false;
@@ -76,17 +82,18 @@ public class UserInterface {
                 }
 
 
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
     }
-//    private void init(){
+
+    //    private void init(){
 //        DealershipFileManager fileManager = new DealershipFileManager();
 //        this.dealership=fileManager.getDealership();
 //    }
-    public void displayMenuOptions(){
+    public void displayMenuOptions() {
         System.out.println("*****Welcome to the Dealership!!!*****");
         System.out.println(" ");
         System.out.println("***Our Options***");
@@ -103,7 +110,7 @@ public class UserInterface {
         System.out.println("0 - Quit");
     }
 
-    public void processGetByPriceRequest(VehicleDAO vehicleDAO, Scanner scanner){
+    public void processGetByPriceRequest(VehicleDAO vehicleDAO, Scanner scanner) {
         System.out.print("Enter minimum value: ");
         double minPrice = scanner.nextDouble();
         System.out.print("Enter maximum value: ");
@@ -111,29 +118,31 @@ public class UserInterface {
         displayVehicles(vehicleDAO.getAllVehiclesByPriceRange(minPrice, maxPrice));
 
 
-
     }
-    public void processGetByMakeModelRequest(VehicleDAO vehicleDAO, Scanner scanner){
+
+    public void processGetByMakeModelRequest(VehicleDAO vehicleDAO, Scanner scanner) {
         System.out.print("Enter make: ");
         String make = scanner.nextLine();
         System.out.print("Enter model: ");
         String model = scanner.nextLine();
-       displayVehicles(vehicleDAO.getAllVehiclesByMakeModel(make, model));
+        displayVehicles(vehicleDAO.getAllVehiclesByMakeModel(make, model));
     }
 
-    public void processGetByYearRequest(VehicleDAO vehicleDAO, Scanner scanner){
+    public void processGetByYearRequest(VehicleDAO vehicleDAO, Scanner scanner) {
         System.out.print("Enter minimum year: ");
         int minYear = scanner.nextInt();
         System.out.print("Enter maximum year: ");
         int maxYear = scanner.nextInt();
         displayVehicles(vehicleDAO.getAllVehiclesByYearRange(minYear, maxYear));
     }
-    public void processGetByColorRequest(VehicleDAO vehicleDAO, Scanner scanner){
+
+    public void processGetByColorRequest(VehicleDAO vehicleDAO, Scanner scanner) {
         System.out.print("Enter color: ");
         String color = scanner.nextLine();
         displayVehicles(vehicleDAO.getAllVehiclesByColor(color));
     }
-    public void processGetByMileageRequest(VehicleDAO vehicleDAO, Scanner scanner){
+
+    public void processGetByMileageRequest(VehicleDAO vehicleDAO, Scanner scanner) {
         System.out.print("Enter minimum mileage: ");
         int minMil = scanner.nextInt();
         System.out.print("Enter maximum mileage: ");
@@ -141,23 +150,23 @@ public class UserInterface {
         displayVehicles(vehicleDAO.getAllVehiclesByMileageRange(minMil, maxMil));
     }
 
-    public void processGetByVehicleTypeRequest(VehicleDAO vehicleDAO, Scanner scanner){
+    public void processGetByVehicleTypeRequest(VehicleDAO vehicleDAO, Scanner scanner) {
         System.out.print("Enter type: ");
         String type = scanner.nextLine();
         displayVehicles(vehicleDAO.getAllVehiclesByType(type));
     }
 
-    public void displayVehicles (List<Vehicle> vehicles) {
+    public void displayVehicles(List<Vehicle> vehicles) {
         for (Vehicle vehicle : vehicles) {
             System.out.println(vehicle);
         }
     }
 
-    public void processGetAllVehicleRequest(VehicleDAO vehicleDAO){
+    public void processGetAllVehicleRequest(VehicleDAO vehicleDAO) {
         displayVehicles(vehicleDAO.getAllVehicles());
     }
 
-    public void processAddVehicleRequest(VehicleDAO vehicleDAO,Scanner scanner){
+    public void processAddVehicleRequest(VehicleDAO vehicleDAO, Scanner scanner) {
         System.out.print("Enter vin: ");
         String vin = scanner.nextLine();
         System.out.print("Enter year: ");
@@ -181,15 +190,16 @@ public class UserInterface {
         int isSold = scanner.nextInt();
         scanner.nextLine();
         boolean soldStatus = false;
-        if (isSold == 1){
+        if (isSold == 1) {
             soldStatus = true;
         }
 
-        Vehicle v = new Vehicle(vin, year, make, model, type,color, mileage,price, soldStatus);
+        Vehicle v = new Vehicle(vin, year, make, model, type, color, mileage, price, soldStatus);
         vehicleDAO.addVehicle(v);
 
     }
-    public void processRemoveVehicleRequest(VehicleDAO vehicleDAO, Scanner scanner){
+
+    public void processRemoveVehicleRequest(VehicleDAO vehicleDAO, Scanner scanner) {
         displayVehicles(vehicleDAO.getAllVehicles());
 
         System.out.print("Enter vin that you want to remove: ");
@@ -198,7 +208,7 @@ public class UserInterface {
         vehicleDAO.removeVehicle(removedVin);
     }
 
-    public void processContractRequest(SalesDao salesDao, LeaseDao leaseDao, Scanner scanner){
+    public void processContractRequest(VehicleDAO vehicleDAO, SalesDao salesDao, LeaseDao leaseDao, Scanner scanner) {
         System.out.println("Choose from next option:");
         System.out.println("1. Sale Contract");
         System.out.println("2. Lease Contract");
@@ -206,21 +216,15 @@ public class UserInterface {
         System.out.print("Enter your choice: ");
         int choice = scanner.nextInt();
         scanner.nextLine();
-        System.out.print("Enter your name: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter you email: ");
-        String email = scanner.nextLine();
-        LocalDateTime localDate = LocalDateTime.now();
+        LocalDate localDate = LocalDate.now();
         String date_time = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        ContractFileManager fileManager = new ContractFileManager();
 
-
-        switch (choice){
+        switch (choice) {
 
             case 1:
                 System.out.print("Enter VIN of the vehicle: ");
-                int vin_veh = scanner.nextInt();
+                String vin_veh = scanner.nextLine();
 
                 scanner.nextLine();
 
@@ -230,34 +234,33 @@ public class UserInterface {
                 String yes_no = scanner.nextLine();
                 boolean answer = true;
 
-                if (yes_no.equalsIgnoreCase("yes")){
+                if (yes_no.equalsIgnoreCase("yes")) {
                     answer = true;
 
-                }else {
+                } else {
                     answer = false;
 
                 }
 
-                SalesContract salesContract = new SalesContract(date_time, name, email,
-                        dealership.getVehicleByTheVin(vin_veh), 0.0, 0.0, 0.05, 100, 0.0,answer);
-                fileManager.saveContract(salesContract);
+                SalesContract salesContract = new SalesContract(0, vin_veh, 0.00, 0.00, 100, answer,
+                        LocalDate.now());
+                salesDao.addContract(salesContract);
+
                 break;
             case 2:
                 System.out.print("Enter VIN of the vehicle: ");
-                int vin_veh2 = scanner.nextInt();
+                String vin_veh2 = scanner.nextLine();
                 scanner.nextLine();
 
-                LeaseContract leaseContract = new LeaseContract(date_time, name, email,
-                        dealership.getVehicleByTheVin(vin_veh2),0.0, 0.0, 0.0, 0.0);
+                LeaseContract leaseContract = new LeaseContract(0,0.00,0.00, vin_veh2);
 
-                fileManager.saveContract(leaseContract);
-
-
-                break;
+                leaseDao.addContract(leaseContract);
+break;
             default:
                 System.out.println("Invalid input. Try again!");
                 break;
         }
 
 
+    }
 }

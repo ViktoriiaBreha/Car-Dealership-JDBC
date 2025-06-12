@@ -1,5 +1,6 @@
 package com.pluralsight.models;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class SalesContract extends Contract {
@@ -9,11 +10,12 @@ public class SalesContract extends Contract {
         private boolean finance_status;
         private String vin;
         private int contract_id;
-        private Date sale_date;
+        private LocalDate sale_date;
 
         public SalesContract (){};
-    public SalesContract(String date_of_contract, String customer_name, String customer_email, Vehicle vehicle_sold, double total_price, double monthly_payment, int contract_id, String vin, double sales_tax, double recording_fee, double processing_fee, boolean finance_status, Date sale_date) {
-        super(date_of_contract, customer_name, customer_email, vehicle_sold, total_price, monthly_payment);
+
+    public SalesContract(int contract_id, String vin, double sales_tax, double recording_fee, double processing_fee,
+                         boolean finance_status, LocalDate sale_date) {
         this.contract_id = contract_id;
         this.vin = vin;
         this.sales_tax = sales_tax;
@@ -22,6 +24,17 @@ public class SalesContract extends Contract {
         this.finance_status = finance_status;
         this.sale_date = sale_date;
     }
+
+//    public SalesContract(String date_of_contract, String customer_name, String customer_email, Vehicle vehicle_sold, double total_price, double monthly_payment, int contract_id, String vin, double sales_tax, double recording_fee, double processing_fee, boolean finance_status, Date sale_date) {
+//        super(date_of_contract, vehicle_sold, total_price, monthly_payment);
+//        this.contract_id = contract_id;
+//        this.vin = vin;
+//        this.sales_tax = sales_tax;
+//        this.recording_fee = recording_fee;
+//        this.processing_fee = processing_fee;
+//        this.finance_status = finance_status;
+//        this.sale_date = sale_date;
+//    }
 
         @Override
         public double getTotal_price() {
@@ -123,7 +136,7 @@ public class SalesContract extends Contract {
         this.contract_id = contract_id;
     }
 
-    public void setSale_date(Date sale_date) {
+    public void setSale_date(LocalDate sale_date) {
         this.sale_date = sale_date;
     }
 
@@ -139,7 +152,7 @@ public class SalesContract extends Contract {
         return contract_id;
     }
 
-    public Date getSale_date() {
+    public LocalDate getSale_date() {
         return sale_date;
     }
 }

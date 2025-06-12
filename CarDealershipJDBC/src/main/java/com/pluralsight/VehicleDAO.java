@@ -169,6 +169,27 @@ public class VehicleDAO {
         return vehicles;
     }
 
+    public Vehicle getVehicleByVin(String vin){
+        Vehicle vehicle = new Vehicle();
+        String query = "SELECT * FROM vehicles WHERE vin LIKE ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1,vin);
+
+            try (ResultSet results = preparedStatement.executeQuery()) {
+
+                if(results.next()){
+                     vehicle = createVehicleFromResultSet(results);
+                }
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return vehicle;
+    }
+
     public boolean addVehicle (Vehicle vehicle){
         String query = "INSERT INTO vehicles (vin, year, make, model, type, color, mileage, price, sold) VALUES" +
                 " " +

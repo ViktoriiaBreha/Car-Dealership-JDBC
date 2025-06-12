@@ -7,13 +7,21 @@ public class LeaseContract extends Contract{
     private int contract_id;
     private String vin;
 
-    public LeaseContract(String date_of_contract, String customer_name, String customer_email, Vehicle vehicle_sold, double total_price, double monthly_payment, int contract_id, double ending_value, double lease_fee, String vin) {
-        super(date_of_contract, customer_name, customer_email, vehicle_sold, total_price, monthly_payment);
+    public LeaseContract(){};
+    public LeaseContract(int contract_id, double ending_value, double lease_fee, String vin) {
         this.contract_id = contract_id;
         this.ending_value = ending_value;
         this.lease_fee = lease_fee;
         this.vin = vin;
     }
+
+//    public LeaseContract(String date_of_contract, String customer_name, String customer_email, Vehicle vehicle_sold, double total_price, double monthly_payment, int contract_id, double ending_value, double lease_fee, String vin) {
+//        super(date_of_contract, vehicle_sold, total_price, monthly_payment);
+//        this.contract_id = contract_id;
+//        this.ending_value = ending_value;
+//        this.lease_fee = lease_fee;
+//        this.vin = vin;
+//    }
 
 
     @Override
@@ -50,5 +58,29 @@ public class LeaseContract extends Contract{
 
     public double getLease_fee() {
         return lease_fee;
+    }
+
+    public int getContract_id() {
+        return contract_id;
+    }
+
+    public String getVin() {
+        return vin;
+    }
+
+    public void setEnding_value(double ending_value) {
+        this.ending_value = ending_value;
+    }
+
+    public void setLease_fee(double lease_fee) {
+        this.lease_fee = lease_fee;
+    }
+
+    public void setContract_id(int contract_id) {
+        this.contract_id = contract_id;
+    }
+
+    public void setVin(String vin) {
+        this.vin = vin;
     }
 }
