@@ -1,8 +1,11 @@
 package com.pluralsight;
 
 import com.pluralsight.models.Dealership;
+import com.pluralsight.models.SalesContract;
 import com.pluralsight.models.Vehicle;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -63,6 +66,8 @@ public class UserInterface {
                     case 9:
                         processRemoveVehicleRequest(vehicleDAO, scanner);
                         break;
+                    case 10:
+                        break;
                     case 0:
                         run = false;
                         System.exit(0);
@@ -94,6 +99,7 @@ public class UserInterface {
         System.out.println("7 - List ALL vehicles");
         System.out.println("8 - Add a vehicle");
         System.out.println("9 - Remove a vehicle");
+        System.out.println("10 - Sell/Lease a vehicle");
         System.out.println("0 - Quit");
     }
 
@@ -191,6 +197,67 @@ public class UserInterface {
 
         vehicleDAO.removeVehicle(removedVin);
     }
+
+    public void processContractRequest(SalesDao salesDao, LeaseDao leaseDao, Scanner scanner){
+        System.out.println("Choose from next option:");
+        System.out.println("1. Sale Contract");
+        System.out.println("2. Lease Contract");
+        System.out.println(" ");
+        System.out.print("Enter your choice: ");
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter your name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter you email: ");
+        String email = scanner.nextLine();
+        LocalDateTime localDate = LocalDateTime.now();
+        String date_time = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        ContractFileManager fileManager = new ContractFileManager();
+
+
+        switch (choice){
+
+            case 1:
+                System.out.print("Enter VIN of the vehicle: ");
+                int vin_veh = scanner.nextInt();
+
+                scanner.nextLine();
+
+
+                System.out.println("Would you like to have finance? (yes/no)");
+                System.out.print("Your answer: ");
+                String yes_no = scanner.nextLine();
+                boolean answer = true;
+
+                if (yes_no.equalsIgnoreCase("yes")){
+                    answer = true;
+
+                }else {
+                    answer = false;
+
+                }
+
+                SalesContract salesContract = new SalesContract(date_time, name, email,
+                        dealership.getVehicleByTheVin(vin_veh), 0.0, 0.0, 0.05, 100, 0.0,answer);
+                fileManager.saveContract(salesContract);
+                break;
+            case 2:
+                System.out.print("Enter VIN of the vehicle: ");
+                int vin_veh2 = scanner.nextInt();
+                scanner.nextLine();
+
+                LeaseContract leaseContract = new LeaseContract(date_time, name, email,
+                        dealership.getVehicleByTheVin(vin_veh2),0.0, 0.0, 0.0, 0.0);
+
+                fileManager.saveContract(leaseContract);
+
+
+                break;
+            default:
+                System.out.println("Invalid input. Try again!");
+                break;
+        }
 
 
 }
